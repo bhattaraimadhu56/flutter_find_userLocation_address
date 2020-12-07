@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeMainPage extends StatefulWidget {
   @override
@@ -6,6 +7,10 @@ class HomeMainPage extends StatefulWidget {
 }
 
 class _HomeMainPageState extends State<HomeMainPage> {
+// define the variable here
+
+  Position _currentPosition;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +41,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
             autofocus: true,
             onTap: () {
               // Code to get the current location here
+              _getCurrentLocation();
+              //exit drawer or go back
+              Navigator.pop(context);
             },
             leading: Icon(Icons.location_city_sharp), // give icon on left side
             title: Text("Home Page"), // write text here
@@ -44,6 +52,37 @@ class _HomeMainPageState extends State<HomeMainPage> {
           ),
         ]),
       ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (_currentPosition != null)
+            Text(
+                "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+          FlatButton(
+            child: Text("Get location"),
+            onPressed: () {
+              _getCurrentLocation();
+            },
+          ),
+        ],
+      ),
     );
+  }
+
+// function to get the current location
+
+  _getCurrentLocation() {
+    final Geolocator geolocator = Geolocator();
+    // ..forceAndroidLocationManager;
+
+    Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        print("Hi, Your location is ${_currentPosition}");
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
 }
