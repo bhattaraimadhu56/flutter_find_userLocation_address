@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:geolocator/geolocator.dart';
 
 class HomeMainPage extends StatefulWidget {
@@ -9,7 +10,10 @@ class HomeMainPage extends StatefulWidget {
 class _HomeMainPageState extends State<HomeMainPage> {
 // define the variable here
 
+  final Geolocator geolocator = Geolocator();
+
   Position _currentPosition;
+  String _currentAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -52,25 +56,26 @@ class _HomeMainPageState extends State<HomeMainPage> {
           ),
         ]),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (_currentPosition != null)
-            Text(
-                "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
-          FlatButton(
-            child: Text("Get location"),
-            onPressed: () {
-              _getCurrentLocation();
-            },
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (_currentPosition != null)
+              Text(
+                  "Latitude is : ${_currentPosition.latitude}, Longitude is : ${_currentPosition.longitude}"),
+            FlatButton(
+              child: Text("Get location"),
+              onPressed: () {
+                _getCurrentLocation();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-// function to get the current location
-
+// function to get the current location lat lng
   _getCurrentLocation() {
     final Geolocator geolocator = Geolocator();
     // ..forceAndroidLocationManager;
@@ -85,4 +90,6 @@ class _HomeMainPageState extends State<HomeMainPage> {
       print(e);
     });
   }
+
+ 
 }
