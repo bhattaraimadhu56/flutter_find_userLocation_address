@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geocoder/geocoder.dart';
 
 import 'package:geolocator/geolocator.dart';
 
@@ -13,7 +15,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
   final Geolocator geolocator = Geolocator();
 
   Position _currentPosition;
-  String _currentAddress;
+  String _currentAddress = "Now you will get your current location";
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +62,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_currentPosition != null)
-              Text(
-                  "Latitude is : ${_currentPosition.latitude}, Longitude is : ${_currentPosition.longitude}"),
+            if (_currentPosition != null) Text(_currentAddress),
+            // Text(
+            //     "Latitude is : ${_currentPosition.latitude}, Longitude is : ${_currentPosition.longitude}"),
             FlatButton(
               child: Text("Get location"),
               onPressed: () {
@@ -75,21 +77,22 @@ class _HomeMainPageState extends State<HomeMainPage> {
     );
   }
 
-// function to get the current location lat lng
-  _getCurrentLocation() {
-    final Geolocator geolocator = Geolocator();
-    // ..forceAndroidLocationManager;
+  _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      _currentPosition = position;
+      print("Hi, Your location is ${_currentPosition}");
+    });
+    final coordinates = new Coordinates(position.latitude, position.longitude);
 
-    Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-        print("Hi, Your location is ${_currentPosition}");
-      });
-    }).catchError((e) {
-      print(e);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
+    // print("${first.featureName} : ${first.addressLine}");
+    print("Your current address is -   ${first.addressLine}");
+    setState(() {
+      _currentAddress = "${first.featureName}, ${first.addressLine}";
     });
   }
-
- 
 }
