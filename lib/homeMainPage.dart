@@ -81,7 +81,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _currentPosition = position;
-      print("Hi, Your location is ${_currentPosition}");
+      // print("Hi, Your location is ${_currentPosition}");
     });
     final coordinates = new Coordinates(position.latitude, position.longitude);
 
@@ -91,7 +91,8 @@ class _HomeMainPageState extends State<HomeMainPage> {
     // print("${first.featureName} : ${first.addressLine}");
     print("Your current address is -   ${first.addressLine}");
     setState(() {
-      _currentAddress = "${first.featureName}, ${first.addressLine}";
+      // _currentAddress = "${first.featureName}, ${first.addressLine}";
+      _currentAddress = " ${first.addressLine}";
     });
   }
 }

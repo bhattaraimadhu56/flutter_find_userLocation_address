@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:geoLocationAndAddress/homeMainPage.dart';
+import 'package:geo_location_and_address/homeMainPage.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: 'Flutter Demo',
     home: HomeMainPage(),
     theme: ThemeData(
